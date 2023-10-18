@@ -1,6 +1,7 @@
 package com.example.ToDoList.controller;
 
 
+import com.example.ToDoList.payloads.CustomAPIResponse;
 import com.example.ToDoList.response.TodoItemRequest;
 import com.example.ToDoList.response.TodoItemResponse;
 import com.example.ToDoList.service.TodoItemService;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +24,7 @@ public class TodoItemController {
     @Autowired
     private  TodoItemService todoItemService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+
 
     //@ApiParam: Annotate method parameters with this annotation to provide additional information about the parameters.
     //@ApiResponse: Annotate your API methods with this annotation to provide information about the possible responses.
@@ -33,7 +34,8 @@ public class TodoItemController {
     public ResponseEntity<TodoItemResponse> createTodoItem(
             @ApiParam(value = "Todo item details", required = true) @RequestBody TodoItemRequest todoItemRequest) {
         TodoItemResponse createdTodoItem = todoItemService.createTodoItem(todoItemRequest);
-        return new ResponseEntity<>(createdTodoItem, HttpStatus.CREATED);
+         return new ResponseEntity(new CustomAPIResponse("Task Added Succesful",true), HttpStatus.OK);
+        //return new ResponseEntity<>(createdTodoItem, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -87,7 +89,9 @@ public class TodoItemController {
             @ApiParam(value = "Updated todo item details", required = true) @RequestBody TodoItemRequest todoItemRequest) {
         TodoItemResponse updatedTodoItem = todoItemService.updateTodoItem(id, todoItemRequest);
         if (updatedTodoItem != null) {
-            return new ResponseEntity<>(updatedTodoItem, HttpStatus.OK);
+          //  return new ResponseEntity<>(updatedTodoItem, HttpStatus.OK);
+            return new ResponseEntity(new CustomAPIResponse("Task Updated Succesful",true), HttpStatus.OK);
+
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -101,7 +105,8 @@ public class TodoItemController {
     public ResponseEntity<Void> deleteTodoItem(
             @ApiParam(value = "ID of the todo item", required = true) @PathVariable Long id) {
         todoItemService.deleteTodoItem(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+     //   return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(new CustomAPIResponse("Task Deleted Succesfuylly",true), HttpStatus.OK );
     }
 
 }
